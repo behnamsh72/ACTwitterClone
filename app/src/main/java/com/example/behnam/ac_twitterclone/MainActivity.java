@@ -71,14 +71,18 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     }
 
     public void rootTapped(View view) {
+        hideTheKeyBoard();
+
+
+    }
+
+    private void hideTheKeyBoard() {
         try {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
