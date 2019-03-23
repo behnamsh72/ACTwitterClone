@@ -78,6 +78,8 @@ public class TwitterUsers extends androidx.fragment.app.Fragment {
                         for (ParseUser twitterUser : objects) {
                             twitterUsers.add(twitterUser.getUsername());
                         }
+                        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, twitterUsers);
+                        listView.setAdapter(adapter);
                     }
                 }
             });
@@ -85,8 +87,7 @@ public class TwitterUsers extends androidx.fragment.app.Fragment {
         } catch (Exception e) {
 
         }
-        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, twitterUsers);
-        listView.setAdapter(adapter);
+
         Log.d("behnam1", "onCreateView");
         return view;
 

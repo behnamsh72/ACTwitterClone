@@ -61,13 +61,14 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container,TwitterUsers.newInstance(), TWITTER_USERS_FRAGMENT_TAG)
                 .commit();
+        hideTheKeyBoard();
     }
     @Override
     public void transitionFromLogin() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container,TwitterUsers.newInstance(), TWITTER_USERS_FRAGMENT_TAG)
                 .commit();
-
+        hideTheKeyBoard();
     }
 
     public void rootTapped(View view) {
