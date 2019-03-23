@@ -2,6 +2,7 @@ package com.example.behnam.ac_twitterclone;
 
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,8 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -24,7 +24,10 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
@@ -32,9 +35,13 @@ import androidx.annotation.Nullable;
  */
 public class TwitterUsers extends androidx.fragment.app.Fragment {
     private TwitterUsersCallback twitterUsersCallback;
+    private ArrayList<String> twitterUsers = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private UsersAdapter usersAdapter;
+/*
     private ListView listView;
-    private ArrayList<String> twitterUsers;
     private ArrayAdapter adapter;
+*/
 
 
     public TwitterUsers() {
@@ -55,9 +62,6 @@ public class TwitterUsers extends androidx.fragment.app.Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         FancyToast.makeText(getContext(), "Welcome " + ParseUser.getCurrentUser().getUsername(), Toast.LENGTH_LONG, FancyToast.INFO, false).show();
-        twitterUsers = new ArrayList<>();
-        Log.d("behnam1", "onCreate");
-
     }
 
 
@@ -66,38 +70,43 @@ public class TwitterUsers extends androidx.fragment.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_twitter_users, container, false);
+/*
         listView = view.findViewById(R.id.listView);
+*/
 
-        try {
-            ParseQuery<ParseUser> query = ParseUser.getQuery();
-            query.whereNotEqualTo("username", ParseUser.getCurrentUser().getUsername());
-            query.findInBackground(new FindCallback<ParseUser>() {
-                @Override
-                public void done(List<ParseUser> objects, ParseException e) {
-                    if (objects.size() > 0 && e == null) {
+        recyclerView = view.findViewById(R.id.recyclerView);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereNotEqualTo("username", ParseUser.getCurrentUser().getUsername());
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Getting data");
+        progressDialog.show();
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.size() > 0) {
                         for (ParseUser twitterUser : objects) {
-                            twitterUsers.add(twitterUser.getUsername());
+                            twitterUsers.add(twitterUser.get("username").toString());
                         }
+                        progressDialog.dismiss();
+                        Toast.makeText(getActivity(), "finished" + twitterUsers.size(), Toast.LENGTH_SHORT).show();
+                        usersAdapter = new UsersAdapter(twitterUsers);
+                        recyclerView.setAdapter(usersAdapter);
                     }
+
+                } else {
+                    FancyToast.makeText(getActivity(), e.getMessage(), FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
                 }
-            });
-
-        } catch (Exception e) {
-
-        }
-        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, twitterUsers);
-        listView.setAdapter(adapter);
-        Log.d("behnam1", "onCreateView");
+            }
+        });
+/*        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, twitterUsers);
+        listView.setAdapter(adapter);*/
         return view;
 
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("behnam1", "onResume");
-    }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -137,5 +146,49 @@ public class TwitterUsers extends androidx.fragment.app.Fragment {
 
     public interface TwitterUsersCallback {
         void logout();
+    }
+
+    private class UsersHolder extends RecyclerView.ViewHolder {
+        private String user;
+        private TextView userTextView;
+
+        public UsersHolder(@NonNull View itemView) {
+            super(itemView);
+            userTextView = itemView.findViewById(R.id.user_text_view);
+        }
+
+        public void bind(String twitterUser) {
+            user = twitterUser;
+            userTextView.setText(user);
+        }
+    }
+
+    private class UsersAdapter extends RecyclerView.Adapter<UsersHolder> {
+        private ArrayList<String> twitterUsers;
+
+        public UsersAdapter(ArrayList<String> twitterUsers) {
+            this.twitterUsers = twitterUsers;
+        }
+
+        public void setTwitterUsers(ArrayList<String> twitterUsers) {
+            this.twitterUsers = twitterUsers;
+        }
+
+        @NonNull
+        @Override
+        public UsersHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.recycler_view_layout, parent, false);
+            return new UsersHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull UsersHolder holder, int position) {
+            holder.bind(twitterUsers.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return twitterUsers.size();
+        }
     }
 }
