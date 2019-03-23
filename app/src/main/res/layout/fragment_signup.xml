@@ -5,6 +5,7 @@
     android:background="@color/loginColorBackground"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:onClick="rootTapped"
     tools:context=".SignUpFragment">
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imgViewLogin"
@@ -72,27 +73,29 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtUsernameSignUp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Sign Up"
         android:layout_marginRight="8dp"
-        android:background="#CF7000"
+        style="@style/Widget.MaterialComponents.Button"
+        android:backgroundTint="#CF7000"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtPasswordSignUp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGoToLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
-        android:background="#8D10CA"
+        android:backgroundTint="#8D10CA"
+        style="@style/Widget.MaterialComponents.Button"
         android:text="LOG IN"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
