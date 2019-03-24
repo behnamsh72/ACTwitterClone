@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -28,7 +29,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private LoginCallBack loginCallBack;
     private MaterialButton btnLogin;
     private MaterialButton btnSignup;
-    private EditText edtUsername;
+    private TextInputEditText edtUsername;
     private EditText edtPassword;
     public LoginFragment() {
         // Required empty public constructor

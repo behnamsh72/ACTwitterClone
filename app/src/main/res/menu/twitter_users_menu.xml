@@ -3,9 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/logoutUserItem"
-        android:orderInCategory="100"
-        app:showAsAction="never"
+        android:orderInCategory="101"
+        app:showAsAction="always"
         android:title="Logout"/>
+    <item
+        android:id="@+id/sendItem"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom|withText"
+        android:title="send"
+        android:icon="@drawable/ic_send_orange_24dp"/>
 
 
 </menu>

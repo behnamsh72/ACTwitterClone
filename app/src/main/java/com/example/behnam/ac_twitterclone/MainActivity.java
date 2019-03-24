@@ -12,11 +12,12 @@ import com.parse.ParseUser;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements LoginFragment.LoginCallBack, SignUpFragment.SignUpFragmnetCallback, TwitterUsers.TwitterUsersCallback {
+public class MainActivity extends AppCompatActivity implements LoginFragment.LoginCallBack,SignUpFragment.SignUpFragmnetCallback, TwitterUsers.TwitterUsersCallback {
 
     private final String LOG_IN_FRAGMENT_TAG = "LoginFragment";
     private final String SIGN_UP_FRAGMENT_TAG = "SignUpFragment";
     private final String TWITTER_USERS_FRAGMENT_TAG = "TwitterUsers";
+    private final String SEND_FRAGMENT_TAG = "send_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,5 +99,14 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 }
             }
         });
+    }
+
+    @Override
+    public void sendTweet() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container,SendFragment.newInstance(), SEND_FRAGMENT_TAG)
+                .addToBackStack(null)
+                .commit();
+
     }
 }
